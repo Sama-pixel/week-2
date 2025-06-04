@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the number</title>
+    <style>
+        body{
+            background-color: #E9F5DB;
+            color:#718355
+        }
+        p{
+            font-size: 18px;
+        }
+        input , button{
+            width: 150px;
+            padding: 5px 10px;
+            margin: auto;
+            background-color: #B5C99A;
+            color:#718355
+        }
+        
+         
+    </style>
+ 
+</head>
+<body>
+    <h1>Number guessing game</h1>
+    <p>
+    We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.
+    </p>
+ <!-- <label for="guessfield">Enter your guess</label> -->  
+    <input type="number" name="number is" id="guessfield" min="1" max="100" placeholder="Guess the number">
+    <button id="submitguess">Submit Guess</button>
+    <button id="restartbtn" style="display: none;">Restart</button>
+
+    <p id="prevguess">Previous Guesses: </p>
+    <p id="resultmessage"> </p>
+
+    <script>
+        // define random number between 1 and 100, previou guesses and turns start form 1
+        let randomNumber = Math.floor(Math.random() * 100) +1;
+        let prevguess = [];
+        let turn = 1;
+
+        document.getElementById('submitguess').addEventListener("click", checkGuess);
+        document.getElementById('restartbtn').addEventListener("click", restartGame);
+
+        //check the guesses
+        function checkGuess(){
+            const userGuess = Number(document.getElementById('guessfield').value);
+            updatePreviousGuess(userGuess);
+            //if the guess is correct
+            if(userGuess == randomNumber){
+                displayMessage("🥳 Congratolation!! You got it right");
+                endGame();
+                
+            }
+            // if the guess isn't correct and no turns left
+            else if(turn === 10){
+                displayMessage("💀 Game over!! The number was " + randomNumber);
+                endGame();
+              
+            }
+            // if the guess isn't correct and there are turns left
+            else{
+                if(userGuess < randomNumber){
+                    displayMessage("Too low!!");
+                }else{
+                    displayMessage("Too high!!");
+                }
+                turn++;
+            }
+        }
+        // record the previous guesses
+        function updatePreviousGuess(guess){
+            prevguess.push(guess);
+            document.getElementById('prevguess').textContent = "Previous guess:" + prevguess;
+        }
+        // dispaly message
+        function displayMessage(msg){
+            document.getElementById('resultmessage').textContent = msg;
+        }
+       
+
+        //End the game
+        function endGame(){
+            document.getElementById('guessfield').disabled = true;
+            document.getElementById('submitguess').disabled = true;
+            document.getElementById('restartbtn').style.display = 'inline';
+        }
+
+        //Restart the gamr
+        function restartGame(){
+            randomNumber = Math.floor(Math.random() * 100) + 1;
+            prevguess = [];
+            turn = 1;
+            displayMessage("");
+            document.getElementById('prevguess').textContent= "Previous Gusses:";
+            document.getElementById('guessfield').disabled = false;
+            document.getElementById('submitguess').disabled = false;
+            document.getElementById('restartbtn').style.display = 'none';
+        }
+    </script>
+
+    
+</body>
+</html>
